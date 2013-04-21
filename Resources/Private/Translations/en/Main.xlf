@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file original="" source-language="en" datatype="plaintext">
+		<body>
+			<trans-unit id="1">
+				<source>typo3-flow-package</source>
+				<target>Packages</target>
+			</trans-unit>
+			<trans-unit id="2">
+				<source>typo3-flow-framework</source>
+				<target>Frameworks</target>
+			</trans-unit>
+			<trans-unit id="3">
+				<source>typo3-flow-plugin</source>
+				<target>Plugins</target>
+			</trans-unit>
+			<trans-unit id="4">
+				<source>typo3-flow-site</source>
+				<target>Sites</target>
+			</trans-unit>
+			<trans-unit id="5">
+				<source>typo3-flow-build</source>
+				<target>Builds</target>
+			</trans-unit>
+			<trans-unit id="6">
+				<source>maintained by</source>
+				<target>maintained by</target>
+			</trans-unit>
+			<trans-unit id="7">
+				<source>Available versions:</source>
+				<target>Available versions:</target>
+			</trans-unit>
+			<trans-unit id="8">
+				<source>No packages found</source>
+				<target>No packages found</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

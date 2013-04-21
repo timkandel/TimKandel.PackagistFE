@@ -1,0 +1,14 @@
+{
+	"name": "timkandel\/plugin-packagistfe",
+	"type": "typo3-flow-plugin",
+	"description": null,
+	"version": null,
+	"require": {
+		"typo3\/neos": "*"
+	},
+	"autoload": {
+		"psr-0": {
+			"TimKandel\\Plugin\\PackagistFE": "Classes"
+		}
+	}
+}

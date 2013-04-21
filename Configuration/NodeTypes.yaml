@@ -1,0 +1,9 @@
+'TimKandel.Plugin.PackagistFE:PackagePlugin':
+  superTypes: ['TYPO3.Neos.NodeTypes:Plugin']
+  ui:
+    label: 'Packagist Frontend'
+    group: 'Plugins'
+    icon:
+      light: 'Images/Icons/White/doc_empty_icon-16.png'
+      dark: 'Images/Icons/Black/doc_empty_icon-16.png'
+  inlineEditable: false
