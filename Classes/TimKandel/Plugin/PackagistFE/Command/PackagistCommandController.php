@@ -1,8 +1,12 @@
 <?php
 namespace TimKandel\Plugin\PackagistFE\Command;
 
-use TYPO3\Flow\Annotations as Flow;
+/*                                                                              *
+ * This script belongs to the TYPO3 Flow package "TimKandel.Plugin.PackagistFE".*
+ *                                                                              *
+ *                                                                              */
 
+use TYPO3\Flow\Annotations as Flow;
 
 class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 
@@ -30,6 +34,12 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $packages = array();
 
 	/**
+	 * @var \TimKandel\Plugin\PackagistFE\Domain\Repository\PackageRepository
+	 * @Flow\Inject
+	 */
+	protected $packageRepository;
+
+	/**
 	 * @var array
 	 */
 	protected $settings;
@@ -51,19 +61,27 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		foreach ($this->settings['repositories'] as $repository) {
 			do {
-				$packageList = json_decode($this->browser->request($repository)->getContent());
+				$packagesList = json_decode($this->browser->request($repository)->getContent());
 
-				foreach ($packageList->results as $packageEnvelope) {
+				foreach ($packagesList->results as $packageEnvelope) {
 					$package = json_decode($this->browser->request($packageEnvelope->url . '.json')->getContent());
 					if (in_array($package->package->type, $this->settings['packageTypes'])) {
-						$this->packages[$package->package->type][] = $package;
+						if ($this->packageRepository->findOneByName($package->package->name)) {
+							$p = $this->packageRepository->findOneByName($package->package->name);
+						} else {
+							$p = new \TimKandel\Plugin\PackagistFE\Domain\Model\Package();
+							$this->packageRepository->add($p);
+						}
+
+						$p->createFromJson($package);
+
 					}
 				}
 
 				//$repository = (isset($packageList->next)) ? $packageList->next : NULL;
 				// fix, because URLs provided by packagist.org are buggy atm
-				if (isset($packageList->next)) {
-					$uri = new \TYPO3\Flow\Http\Uri($packageList->next);
+				if (isset($packagesList->next)) {
+					$uri = new \TYPO3\Flow\Http\Uri($packagesList->next);
 					//$query = array();
 					parse_str($uri->getQuery(), $query);
 					$repository .= '&page=' . intval($query['page']);
@@ -72,17 +90,7 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 				}
 			} while(isset($repository));
 		}
-
-		if (!empty($this->packages)) {
-			if (!is_dir(FLOW_PATH_DATA . 'Packages/')) {
-				mkdir(FLOW_PATH_DATA . 'Packages/');
-			}
-			$basePath = FLOW_PATH_DATA . 'Packages/';
-			foreach ($this->packages as $packagesType => $packages) {
-				$packagesFile = $basePath . $packagesType . '.json';
-				file_put_contents($packagesFile, json_encode($packages));
-			}
-		}
 	}
 
 }
+?>

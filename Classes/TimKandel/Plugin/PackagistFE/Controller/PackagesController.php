@@ -1,10 +1,10 @@
 <?php
 namespace TimKandel\Plugin\PackagistFE\Controller;
 
-/*                                                                        *
+/*                                                                              *
  * This script belongs to the TYPO3 Flow package "TimKandel.Plugin.PackagistFE".*
- *                                                                        *
- *                                                                        */
+ *                                                                              *
+ *                                                                              */
 
 use TYPO3\Flow\Annotations as Flow;
 
@@ -14,6 +14,12 @@ use TYPO3\Flow\Annotations as Flow;
  * @Flow\Scope("singleton")
  */
 class PackagesController extends \TYPO3\Flow\Mvc\Controller\ActionController {
+
+	/**
+	 * @var \TimKandel\Plugin\PackagistFE\Domain\Repository\PackageRepository
+	 * @Flow\Inject
+	 */
+	protected $packageRepository;
 
 	/**
 	 * @var array
@@ -34,15 +40,13 @@ class PackagesController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	 * @return void
 	 */
 	public function indexAction() {
-		$packageList = array();
+		$packagesList = array();
 		foreach ($this->settings['packageTypes'] as $packageType) {
-			$fileContent = file_get_contents(FLOW_PATH_DATA . 'Packages/' . $packageType . '.json');
-			$packageList[$packageType] = json_decode($fileContent, TRUE);
+			$packagesList[$packageType] = $this->packageRepository->findByType($packageType)->execute();
 		}
 
-		$this->view->assign('packagesList', $packageList);
+		$this->view->assign('packagesList', $packagesList);
 	}
 
 }
-
 ?>

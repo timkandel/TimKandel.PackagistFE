@@ -10,7 +10,7 @@
 				<f:for each="{packagesList}" as="packages">
 					<div class="tab-content lite-tab-panes-black">
 						<f:for each="{packages}" as="package">
-							<f:render section="Package" arguments="{package: package.package}" />
+							<f:render section="Package" arguments="{package: package}" />
 						</f:for>
 					</div>
 				</f:for>
@@ -27,11 +27,7 @@
 		<h3>
 			<a href="https://packagist.org/packages/{package.name}">{package.name}</a>
 			<span class="right">
-				<f:translate>maintained by</f:translate>
-				<f:for each="{package.maintainers}" as="maintainer" iteration="iterator">
-					{maintainer.name}
-					<f:if condition="{iterator.isLast}"><f:else>, </f:else></f:if>
-				</f:for>
+				<f:translate>maintained by</f:translate> {package.maintainer}
 			</span>
 		</h3>
 		<p>{package.description}</p>
