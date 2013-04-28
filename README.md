@@ -22,5 +22,4 @@ include: resource://TimKandel.Plugin.PackagistFE/Private/TypoScripts/Library/Nod
 TODO
 ----
 * refactor the import
-* save packages to the database, so pagination, filtering and sorting will be possible
-*
+* implement pagination and filters

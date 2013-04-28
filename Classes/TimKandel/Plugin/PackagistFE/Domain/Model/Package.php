@@ -87,6 +87,21 @@ class Package {
 	protected $dailyDownloads = 0;
 
 	/**
+	 *
+	 * @var \Doctrine\Common\Collections\ArrayCollection<\TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version>
+	 * @ORM\OneToMany(mappedBy="package")
+	 * @ORM\OrderBy({"time" = "DESC"})
+	 */
+	protected $versions;
+
+	/**
+	 *
+	 */
+	public function __construct() {
+		$this->versions = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	/**
 	 * Gets the package's name
 	 *
 	 * @return string
@@ -204,17 +219,75 @@ class Package {
 		$this->dailyDownloads = $dailyDownloads;
 	}
 
-	public function createFromJson($json) {
-		$this->setName($json->package->name);
-		if ($json->package->description !== NULL) {
-			$this->setDescription($json->package->description);
+	/**
+	 * @return \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function getVersions() {
+		return $this->versions;
+	}
+
+	/**
+	 * @param $versionString
+	 * @return null
+	 */
+	public function getVersion($versionString) {
+		foreach ($this->getVersions() as $version) {
+			if ($version->getVersion() === $versionString) {
+				return $version;
+			}
 		}
-		$this->setTime($json->package->time);
-		$this->setMaintainer($json->package->maintainers[0]->name);
-		$this->setType($json->package->type);
-		$this->setTotalDownloads($json->package->downloads->total);
-		$this->setMonthlyDownloads($json->package->downloads->monthly);
-		$this->setDailyDownloads($json->package->downloads->daily);
+
+		return NULL;
+	}
+
+	/**
+	 * @param \TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version $version
+	 */
+	public function addVersion(\TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version $version) {
+		$version->setPackage($this);
+		$this->versions->add($version);
+	}
+
+	/**
+	 * @param \TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version $version
+	 */
+	public function removeVersion(\TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version $version) {
+		$this->versions->removeElement($version);
+	}
+
+	/**
+	 * @param $json
+	 */
+	public function createFromJson($json) {
+		$this->setName($json['package']['name']);
+		if ($json['package']['description'] !== NULL) {
+			$this->setDescription($json['package']['description']);
+		}
+		$this->setTime($json['package']['time']);
+		$this->setMaintainer($json['package']['maintainers'][0]['name']);
+		$this->setType($json['package']['type']);
+		$this->setTotalDownloads($json['package']['downloads']['total']);
+		$this->setMonthlyDownloads($json['package']['downloads']['monthly']);
+		$this->setDailyDownloads($json['package']['downloads']['daily']);
+
+		foreach ($json['package']['versions'] as $versionString => $versionEnvelope) {
+			if ($this->getVersion($versionString)) {
+				$version = $this->getVersion($versionString);
+			} else {
+				$version = new \TimKandel\Plugin\PackagistFE\Domain\Model\Package\Version();
+			}
+
+			$version->setVersion($versionString);
+			$version->setTime($versionEnvelope['time']);
+			$this->addVersion($version);
+		}
+
+		// clean up
+		foreach ($this->getVersions() as $version) {
+			if (!isset($json['package']['versions'][$version->getVersion()])) {
+				$this->removeVersion($version);
+			}
+		}
 	}
 
 }

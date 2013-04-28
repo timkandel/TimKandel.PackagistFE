@@ -34,8 +34,8 @@
 
 		<f:translate>Available versions:</f:translate>
 		<ul>
-			<f:for each="{package.versions}" key="versionName" as="version">
-				<li>{versionName} (<f:format.date format="d.m.Y - H:i:s">{version.time}</f:format.date>)</li>
+			<f:for each="{package.versions}" as="version">
+				<li>{version.version} (<f:format.date format="d.m.Y - H:i:s">{version.time}</f:format.date>)</li>
 			</f:for>
 		</ul>
 	</div>

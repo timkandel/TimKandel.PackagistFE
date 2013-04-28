@@ -61,27 +61,27 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		foreach ($this->settings['repositories'] as $repository) {
 			do {
-				$packagesList = json_decode($this->browser->request($repository)->getContent());
+				$packagesList = json_decode($this->browser->request($repository)->getContent(), TRUE);
 
-				foreach ($packagesList->results as $packageEnvelope) {
-					$package = json_decode($this->browser->request($packageEnvelope->url . '.json')->getContent());
-					if (in_array($package->package->type, $this->settings['packageTypes'])) {
-						if ($this->packageRepository->findOneByName($package->package->name)) {
-							$p = $this->packageRepository->findOneByName($package->package->name);
+				foreach ($packagesList['results'] as $packageEnvelope) {
+					$packageJson = json_decode($this->browser->request($packageEnvelope['url'] . '.json')->getContent(), TRUE);
+					if (in_array($packageJson['package']['type'], $this->settings['packageTypes'])) {
+						if ($this->packageRepository->findOneByName($packageJson['package']['name'])) {
+							$package = $this->packageRepository->findOneByName($packageJson['package']['name']);
+							$this->packageRepository->update($package);
 						} else {
-							$p = new \TimKandel\Plugin\PackagistFE\Domain\Model\Package();
-							$this->packageRepository->add($p);
+							$package = new \TimKandel\Plugin\PackagistFE\Domain\Model\Package();
+							$this->packageRepository->add($package);
 						}
 
-						$p->createFromJson($package);
-
+						$package->createFromJson($packageJson);
 					}
 				}
 
 				//$repository = (isset($packageList->next)) ? $packageList->next : NULL;
 				// fix, because URLs provided by packagist.org are buggy atm
-				if (isset($packagesList->next)) {
-					$uri = new \TYPO3\Flow\Http\Uri($packagesList->next);
+				if (isset($packagesList['next'])) {
+					$uri = new \TYPO3\Flow\Http\Uri($packagesList['next']);
 					//$query = array();
 					parse_str($uri->getQuery(), $query);
 					$repository .= '&page=' . intval($query['page']);
@@ -91,6 +91,6 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 			} while(isset($repository));
 		}
 	}
-
 }
+
 ?>
