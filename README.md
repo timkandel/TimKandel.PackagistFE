@@ -14,7 +14,7 @@ $ ./flow packagist:import
 * include the plugin's TypoScript definitions to your own one's
 
 ```
-include: resource://TimKandel.Plugin.PackagistFE/Private/TypoScripts/Library/NodeTypes.ts2
+include: resource://TimKandel.PackagistFE/Private/TypoScripts/Library/NodeTypes.ts2
 ```
 
 * add the plugin content element "Packagist Frontend" to the position of your choice.

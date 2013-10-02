@@ -1,5 +1,5 @@
-'TimKandel.Plugin.PackagistFE:PackagePlugin':
-  superTypes: ['TYPO3.Neos.NodeTypes:Plugin']
+'TimKandel.PackagistFE:PackagePlugin':
+  superTypes: ['TYPO3.Neos:Plugin']
   ui:
     label: 'Packagist Frontend'
     group: 'Plugins'

@@ -1,6 +1,6 @@
-prototype(TimKandel.Plugin.PackagistFE:PackagePlugin) < prototype(TYPO3.Neos.NodeTypes:Plugin)
-prototype(TimKandel.Plugin.PackagistFE:PackagePlugin) {
-	package = 'TimKandel.Plugin.PackagistFE'
+prototype(TimKandel.PackagistFE:PackagePlugin) < prototype(TYPO3.Neos:Plugin)
+prototype(TimKandel.PackagistFE:PackagePlugin) {
+	package = 'TimKandel.PackagistFE'
 	controller = 'Packages'
 	action = 'index'
 }
