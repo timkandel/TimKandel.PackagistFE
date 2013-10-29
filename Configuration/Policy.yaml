@@ -1,0 +1,8 @@
+resources:
+  methods:
+    TimKandel_PackagistFE_Packages: 'method(TimKandel\PackagistFE\Controller\PackagesController->indexAction())'
+
+acls:
+  Everybody:
+    methods:
+      TimKandel_PackagistFE_Packages: GRANT

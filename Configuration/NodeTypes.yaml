@@ -2,8 +2,5 @@
   superTypes: ['TYPO3.Neos:Plugin']
   ui:
     label: 'Packagist Frontend'
-    group: 'Plugins'
-    icon:
-      light: 'Images/Icons/White/doc_empty_icon-16.png'
-      dark: 'Images/Icons/Black/doc_empty_icon-16.png'
+    group: 'plugins'
   inlineEditable: false
