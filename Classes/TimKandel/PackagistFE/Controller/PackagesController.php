@@ -35,17 +35,12 @@ class PackagesController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	}
 
 	/**
-	 * Index action
-	 *
-	 * @return void
+	 * @param string $packageType
 	 */
-	public function indexAction() {
-		$packagesList = array();
-		foreach ($this->settings['packageTypes'] as $packageType) {
-			$packagesList[$packageType] = $this->packageRepository->findByType($packageType)->execute();
-		}
-
-		$this->view->assign('packagesList', $packagesList);
+	public function indexAction($packageType = 'typo3-flow-plugin') {
+		$packages = $this->packageRepository->findByType($packageType);
+		$this->view->assign('packageTypes', $this->settings['packageTypes']);
+		$this->view->assign('packages', $packages);
 	}
 
 }

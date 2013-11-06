@@ -1,18 +1,13 @@
-<f:if condition="{packagesList}">
+	<ul class="subnav">
+		<f:for each="{packageTypes}" as="packageType">
+			<li class="normal"><a href="{f:uri.action(action: 'index', additionalParams: '{--timkandel_packagistfe-packageplugin: {packageType: packageType}}')}"><f:translate>{packageType}</f:translate></a></li>
+		</f:for>
+	</ul>
+<f:if condition="{packages}">
 	<f:then>
-		<div class="b-tabs">
-			<ul class="tabs lite-tabs">
-				<f:for each="{packagesList}" key="packageType" as="packages">
-					<li class=""><a href="#"><f:translate>{packageType}</f:translate></a></li>
-				</f:for>
-			</ul>
 			<div class="tab-panes">
-				<f:for each="{packagesList}" as="packages">
-					<div class="tab-content lite-tab-panes-black">
-						<f:for each="{packages}" as="package">
-							<f:render section="Package" arguments="{package: package}" />
-						</f:for>
-					</div>
+				<f:for each="{packages}" as="package">
+					<f:render section="Package" arguments="{package: package}" />
 				</f:for>
 			</div>
 		</div>

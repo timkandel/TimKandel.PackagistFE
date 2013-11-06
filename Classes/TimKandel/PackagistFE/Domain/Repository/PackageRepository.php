@@ -17,9 +17,10 @@ class PackageRepository extends \TYPO3\Flow\Persistence\Repository {
 
 	public function findByType($type) {
 		$query = $this->createQuery();
-		return $query->matching(
+		$query->matching(
 			$query->equals('type', $type)
 		)->setOrderings(array('time' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_DESCENDING));
+		return $query->execute();
 	}
 
 }
