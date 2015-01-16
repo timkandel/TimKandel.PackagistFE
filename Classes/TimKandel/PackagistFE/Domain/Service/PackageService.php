@@ -31,6 +31,7 @@ class PackageService {
 		$package->setMonthlyDownloads($result->getDownloads()->getMonthly());
 		$package->setDailyDownloads($result->getDownloads()->getDaily());
 
+		$versions = array();
 		/** @var Result\Package\Version $resultVersion */
 		foreach ($result->getVersions() as $resultVersion) {
 			if ($package->getVersion($resultVersion->getVersion())) {
@@ -42,11 +43,12 @@ class PackageService {
 			$version->setVersion($resultVersion->getVersion());
 			$version->setTime($resultVersion->getTime());
 			$package->addVersion($version);
+			$versions[] = $version->getVersion();
 		}
 
 		// clean up
 		foreach ($package->getVersions() as $version) {
-			if (!isset($json['package']['versions'][$version->getVersion()])) {
+			if (!in_array($version->getVersion(), $versions)) {
 				$package->removeVersion($version);
 			}
 		}
