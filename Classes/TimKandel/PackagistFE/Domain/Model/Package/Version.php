@@ -11,37 +11,27 @@ use TimKandel\PackagistFE\Domain\Model\Package;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * A Version
- *
  * @Flow\Entity
  */
 class Version {
 
 	/**
-	 * The Version's version string
-	 *
 	 * @var string
 	 */
 	protected $version;
 
 	/**
-	 * The Version's time
-	 *
 	 * @var \DateTime
 	 */
 	protected $time;
 
 	/**
-	 * The Version's Package
-	 *
 	 * @var Package
 	 * @ORM\ManyToOne(inversedBy="versions")
 	 */
 	protected $package;
 
 	/**
-	 * Gets the Version's version string
-	 *
 	 * @return string
 	 */
 	public function getVersion() {
@@ -49,8 +39,6 @@ class Version {
 	}
 
 	/**
-	 * Sets the Version's version string
-	 *
 	 * @param string $version
 	 */
 	public function setVersion($version) {
@@ -58,8 +46,6 @@ class Version {
 	}
 
 	/**
-	 * Gets the Version's time
-	 *
 	 * @return \DateTime
 	 */
 	public function getTime() {
@@ -67,8 +53,6 @@ class Version {
 	}
 
 	/**
-	 * Sets the Version's time
-	 *
 	 * @param string|\DateTime $time
 	 */
 	public function setTime($time) {
@@ -80,8 +64,6 @@ class Version {
 	}
 
 	/**
-	 * Gets the Version's Package
-	 *
 	 * @return Package
 	 */
 	public function getPackage() {
@@ -89,8 +71,6 @@ class Version {
 	}
 
 	/**
-	 * Sets the Version's Package
-	 *
 	 * @param Package $package
 	 */
 	public function setPackage(Package $package) {

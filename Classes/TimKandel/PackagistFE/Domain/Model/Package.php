@@ -66,7 +66,7 @@ class Package {
 
 	/**
 	 * @ORM\OneToMany(mappedBy="package")
-	 * @ORM\OrderBy({"time" = "DESC"})
+	 * @ORM\OrderBy({"version" = "DESC"})
 	 * @var ArrayCollection<Version>
 	 */
 	protected $versions;
