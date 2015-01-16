@@ -1,4 +1,13 @@
 TimKandel:
   PackagistFE:
     packageTypes: ['typo3-flow-plugin', 'typo3-flow-framework', 'typo3-flow-package', 'typo3-flow-site', 'typo3-flow-build']
-    repositories: ['https://packagist.org/search.json?type=typo3-flow']
+    repositories:
+      -
+        url: 'https://packagist.org'
+        filters:
+          type: 'typo3-flow'
+TYPO3:
+  Flow:
+    object:
+      excludeClasses:
+        'Guzzle.Http': ['.*']

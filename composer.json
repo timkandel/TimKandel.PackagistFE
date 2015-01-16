@@ -1,10 +1,9 @@
 {
-	"name": "timkandel\/packagistfe",
+	"name": "timkandel/packagistfe",
 	"type": "typo3-flow-plugin",
-	"description": null,
-	"version": null,
 	"require": {
-		"typo3\/neos": "*"
+		"typo3/neos": "*",
+		"knplabs/packagist-api": "1.2"
 	},
 	"autoload": {
 		"psr-0": {

@@ -2,21 +2,21 @@
 namespace TimKandel\PackagistFE\Controller;
 
 /*                                                                              *
- * This script belongs to the TYPO3 Flow package "TimKandel.PackagistFE".		*
+ * This script belongs to the TYPO3 Flow package "TimKandel.PackagistFE".       *
  *                                                                              *
  *                                                                              */
 
+use TimKandel\PackagistFE\Domain\Repository\PackageRepository;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Mvc\Controller\ActionController;
 
 /**
- * Standard controller for the TimKandel.PackagistFE package
- *
  * @Flow\Scope("singleton")
  */
-class PackagesController extends \TYPO3\Flow\Mvc\Controller\ActionController {
+class PackagesController extends ActionController {
 
 	/**
-	 * @var \TimKandel\PackagistFE\Domain\Repository\PackageRepository
+	 * @var PackageRepository
 	 * @Flow\Inject
 	 */
 	protected $packageRepository;
@@ -44,4 +44,3 @@ class PackagesController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 	}
 
 }
-?>

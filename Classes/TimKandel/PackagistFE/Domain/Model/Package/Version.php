@@ -1,8 +1,14 @@
 <?php
 namespace TimKandel\PackagistFE\Domain\Model\Package;
 
-use TYPO3\Flow\Annotations as Flow;
+/*                                                                              *
+ * This script belongs to the TYPO3 Flow package "TimKandel.PackagistFE".       *
+ *                                                                              *
+ *                                                                              */
+
 use Doctrine\ORM\Mapping as ORM;
+use TimKandel\PackagistFE\Domain\Model\Package;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Version
@@ -28,7 +34,7 @@ class Version {
 	/**
 	 * The Version's Package
 	 *
-	 * @var \TimKandel\PackagistFE\Domain\Model\Package
+	 * @var Package
 	 * @ORM\ManyToOne(inversedBy="versions")
 	 */
 	protected $package;
@@ -76,7 +82,7 @@ class Version {
 	/**
 	 * Gets the Version's Package
 	 *
-	 * @return \TimKandel\PackagistFE\Domain\Model\Package
+	 * @return Package
 	 */
 	public function getPackage() {
 		return $this->package;
@@ -85,9 +91,9 @@ class Version {
 	/**
 	 * Sets the Version's Package
 	 *
-	 * @param \TimKandel\PackagistFE\Domain\Model\Package $package
+	 * @param Package $package
 	 */
-	public function setPackage(\TimKandel\PackagistFE\Domain\Model\Package $package) {
+	public function setPackage(Package $package) {
 		$this->package = $package;
 	}
 

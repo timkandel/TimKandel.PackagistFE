@@ -2,28 +2,28 @@
 namespace TimKandel\PackagistFE\Command;
 
 /*                                                                              *
- * This script belongs to the TYPO3 Flow package "TimKandel.PackagistFE".		*
+ * This script belongs to the TYPO3 Flow package "TimKandel.PackagistFE".       *
  *                                                                              *
  *                                                                              */
 
+use Packagist\Api\Client;
+use Packagist\Api\Result\Result;
+use TimKandel\PackagistFE\Domain\Model\Package;
+use TimKandel\PackagistFE\Domain\Service\PackageService;
+use TimKandel\PackagistFE\Domain\Repository\PackageRepository;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Cli\CommandController;
+use TYPO3\Flow\Configuration\ConfigurationManager;
 
-class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Http\Client\Browser
-	 */
-	protected $browser;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Http\Client\CurlEngine
-	 */
-	protected $browserRequestEngine;
+/**
+ * Class PackagistCommandController
+ *
+ * @package TimKandel\PackagistFE\Command
+ */
+class PackagistCommandController extends CommandController {
 
 	/**
-	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
+	 * @var ConfigurationManager
 	 * @Flow\Inject
 	 */
 	protected $configurationManager;
@@ -34,10 +34,16 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $packages = array();
 
 	/**
-	 * @var \TimKandel\PackagistFE\Domain\Repository\PackageRepository
+	 * @var PackageRepository
 	 * @Flow\Inject
 	 */
 	protected $packageRepository;
+
+	/**
+	 * @var PackageService
+	 * @Flow\Inject
+	 */
+	protected $packageService;
 
 	/**
 	 * @var array
@@ -56,41 +62,25 @@ class PackagistCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @return void
 	 */
 	public function importCommand() {
-		$this->browserRequestEngine->setOption(CURLOPT_TIMEOUT, 120);
-		$this->browser->setRequestEngine($this->browserRequestEngine);
-
+		$client = new Client();
 		foreach ($this->settings['repositories'] as $repository) {
-			do {
-				$packagesList = json_decode($this->browser->request($repository)->getContent(), TRUE);
-
-				foreach ($packagesList['results'] as $packageEnvelope) {
-					$packageJson = json_decode($this->browser->request($packageEnvelope['url'] . '.json')->getContent(), TRUE);
-					if (in_array($packageJson['package']['type'], $this->settings['packageTypes'])) {
-						if ($this->packageRepository->findOneByName($packageJson['package']['name'])) {
-							$package = $this->packageRepository->findOneByName($packageJson['package']['name']);
-							$this->packageRepository->update($package);
-						} else {
-							$package = new \TimKandel\PackagistFE\Domain\Model\Package();
-							$this->packageRepository->add($package);
-						}
-
-						$package->createFromJson($packageJson);
+			$client->setPackagistUrl($repository['url']);
+			/** @var Result $result */
+			foreach ($client->search(NULL, $repository['filters']) as $result) {
+				$resultPackage = $client->get($result->getName());
+				if (in_array($resultPackage->getType(), $this->settings['packageTypes'])) {
+					$package = $this->packageRepository->findOneByName($resultPackage->getName());
+					if ($package) {
+						$this->packageRepository->update($package);
+					} else {
+						$package = new Package();
+						$this->packageRepository->add($package);
 					}
-				}
 
-				//$repository = (isset($packageList->next)) ? $packageList->next : NULL;
-				// fix, because URLs provided by packagist.org are buggy atm
-				if (isset($packagesList['next'])) {
-					$uri = new \TYPO3\Flow\Http\Uri($packagesList['next']);
-					//$query = array();
-					parse_str($uri->getQuery(), $query);
-					$repository .= '&page=' . intval($query['page']);
-				} else {
-					$repository = NULL;
+					$this->packageService->mapPackageResult($package, $resultPackage);
 				}
-			} while(isset($repository));
+			}
 		}
 	}
-}
 
-?>
+}
