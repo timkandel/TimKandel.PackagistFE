@@ -39,8 +39,11 @@ class PackagesController extends ActionController {
 	 */
 	public function indexAction($packageType = 'typo3-flow-plugin') {
 		$packages = $this->packageRepository->findByType($packageType);
-		$this->view->assign('packageTypes', $this->settings['packageTypes']);
-		$this->view->assign('packages', $packages);
+		$this->view->assignMultiple(array(
+			'activePackageType' => $packageType,
+			'packageTypes' => $this->settings['packageTypes'],
+			'packages' => $packages
+		));
 	}
 
 }

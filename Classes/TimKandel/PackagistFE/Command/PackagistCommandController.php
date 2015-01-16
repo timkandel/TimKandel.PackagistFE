@@ -29,11 +29,6 @@ class PackagistCommandController extends CommandController {
 	protected $configurationManager;
 
 	/**
-	 * @var array
-	 */
-	protected $packages = array();
-
-	/**
 	 * @var PackageRepository
 	 * @Flow\Inject
 	 */

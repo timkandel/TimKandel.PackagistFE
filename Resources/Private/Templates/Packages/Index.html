@@ -1,15 +1,16 @@
-	<ul class="subnav">
-		<f:for each="{packageTypes}" as="packageType">
-			<li class="normal"><a href="{f:uri.action(action: 'index', additionalParams: '{--timkandel_packagistfe-packageplugin: {packageType: packageType}}')}"><f:translate>{packageType}</f:translate></a></li>
-		</f:for>
-	</ul>
+<dl class="sub-nav">
+	<f:for each="{packageTypes}" as="packageType">
+		<dd class="normal {f:if(condition:'{activePackageType} == {packageType}',then:'active')}"><a href="{f:uri.action(action: 'index', additionalParams: '{--timkandel_packagistfe-packageplugin: {packageType: packageType}}')}"><f:translate>{packageType}</f:translate></a></dd>
+	</f:for>
+</dl>
 <f:if condition="{packages}">
 	<f:then>
-			<div class="tab-panes">
-				<f:for each="{packages}" as="package">
+		<div class="row">
+			<f:widget.paginate objects="{packages}" as="paginatedPackages">
+				<f:for each="{paginatedPackages}" as="package">
 					<f:render section="Package" arguments="{package: package}" />
 				</f:for>
-			</div>
+			</f:widget.paginate>
 		</div>
 	</f:then>
 	<f:else>
@@ -18,20 +19,22 @@
 </f:if>
 
 <f:section name="Package">
-	<div class="b-evaluation">
+	<div class="panel">
 		<h3>
 			<a href="https://packagist.org/packages/{package.name}">{package.name}</a>
 			<span class="right">
 				<f:translate>maintained by</f:translate> {package.maintainer}
 			</span>
 		</h3>
-		<p>{package.description}</p>
+		<f:if condition="{package.description}">
+			<p>{package.description}</p>
+		</f:if>
 
 		<f:translate>Available versions:</f:translate>
-		<ul>
+		<p>
 			<f:for each="{package.versions}" as="version">
-				<li>{version.version} (<f:format.date format="d.m.Y - H:i:s">{version.time}</f:format.date>)</li>
+				<span class="label" title="Released {version.time -> f:format.date(format:'d.m.Y - H:i:s')}">{version.version}</span>
 			</f:for>
-		</ul>
+		</p>
 	</div>
 </f:section>
